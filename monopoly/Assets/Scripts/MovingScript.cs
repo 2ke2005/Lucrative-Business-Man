@@ -8,15 +8,10 @@ public class MovingScript : MonoBehaviour
 {
     public void rollDice()
     {
-        if (activePlayerIs1 == true) {
-            activePlayerLoc = player1Loc;
-        }
-        else
-        {
-            activePlayerLoc = player2Loc; 
-        }
+        //set activeplayerlocation to be the active player's
+        activePlayerLoc = playersLoc[activePlayer];
+        
 
-       
         // get random amount to move
         int gayAmount = Random.Range(1, 6);
         // add dice roll to location of player
@@ -26,53 +21,43 @@ public class MovingScript : MonoBehaviour
         {
             activePlayerLoc = activePlayerLoc - locas.Length;
         }
+
         // update location 
-        if (activePlayerIs1)
-        {
-            player1Loc = activePlayerLoc;
-        }
-        else
-        {
-            player2Loc = activePlayerLoc;
-        }
-
-
+        playersLoc[activePlayer] = activePlayerLoc;
+        
 
         // Move the player object
-        
-        
-        player1.position = locas[player1Loc].position;
-        player2.position = locas[player2Loc].position;
-        
+        playerPiece[activePlayer].position = locas[playersLoc[activePlayer]].position;
+
 
         // change turn 
-        activePlayerIs1 = !activePlayerIs1;
+        activePlayer++;
+        if (activePlayer >= playersLoc.Length ) { activePlayer = 0; }
 
     }
     public int activePlayerLoc = 0;
     [SerializeField] private Transform[] locas;
-    [SerializeField] private Transform player1;
-    [SerializeField] private Transform player2;
-    [SerializeField] private int player1Loc;
-    [SerializeField] private int player2Loc;
-    [SerializeField] private bool activePlayerIs1;
+    [SerializeField] private Transform[] playerPiece;
+    [SerializeField] private int activePlayer = 0;
+    [SerializeField] private int[] playersLoc;
     // Start is called before the first frame update
     void Start()
     {
-        // active player is  one
-        activePlayerIs1 = true;
-
-        player1.position = locas[0].position;
-        player1Loc = 0;   
-        player2Loc = 0;
+        // set locations to start value
+        for (int i = 0; i < playersLoc.Length; i++)
+        {
+            playersLoc[i] = 0;
+        }
+        // set pos to start value
+        for (int i = 0; i < playerPiece.Length; i++)
+        {
+            playerPiece[i].position = locas[playersLoc[i]].position;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown("m"))
-        {
-            rollDice();
-        }*/
+
     }
 }
